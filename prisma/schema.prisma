@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Activity {
+  /// Auto-incremented primary key
+  id Int @id @default(autoincrement())
+
+  /// Text describing what the activity was
+  description String
+
+  /// When the activity started
+  startTime DateTime
+
+  /// When the activity ended
+  endTime DateTime
+
+  /// Automatically set when the record is created
+  createdAt DateTime @default(now())
+}

@@ -1,96 +1,66 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState, useEffect, useRef } from 'react';
+import { createActivity, type CreateActivityState } from '@/lib/actions';
 
-type ActivityFormProps = {
-  onAdd: (activity: {
-    description: string;
-    startTime: string;
-    endTime: string;
-  }) => void;
-};
+const initialState: CreateActivityState = { success: false, error: null };
 
-export default function ActivityForm({ onAdd }: ActivityFormProps) {
-  const [description, setDescription] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [error, setError] = useState('');
+export default function ActivityForm() {
+  const [state, formAction, isPending] = useActionState(createActivity, initialState);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  function handleSubmit() {
-    if (!description.trim()) {
-      setError('A descrição é obrigatória.');
-      return;
+  useEffect(() => {
+    if (state.success) {
+      formRef.current?.reset();
     }
-    if (!startTime || !endTime) {
-      setError('Preencha os horários de início e término.');
-      return;
-    }
-    if (endTime <= startTime) {
-      setError('O término deve ser após o início.');
-      return;
-    }
-
-    setError('');
-    onAdd({ description, startTime, endTime });
-    setDescription('');
-    setStartTime('');
-    setEndTime('');
-  }
+  }, [state.success]);
 
   return (
-    <div className="bg-slate-900 rounded-xl p-6 mb-8">
+    <form ref={formRef} action={formAction} className="bg-slate-900 rounded-xl p-6 mb-8">
       <h2 className="text-lg font-semibold mb-4">Nova atividade</h2>
-
       <div className="flex flex-col gap-4">
         <div>
-          <label className="text-sm text-slate-400 mb-1 block">
-            Descrição
-          </label>
+          <label className="text-sm text-slate-400 mb-1 block">Descrição</label>
           <textarea
+            name="description"
             className="w-full bg-slate-800 rounded-lg p-3 text-white placeholder:text-slate-500 resize-none"
             placeholder="O que você fez?"
             rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="text-sm text-slate-400 mb-1 block">
-              Início
-            </label>
+            <label className="text-sm text-slate-400 mb-1 block">Início</label>
             <input
               type="datetime-local"
+              name="startTime"
               className="w-full bg-slate-800 rounded-lg p-3 text-white"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
             />
           </div>
           <div>
-            <label className="text-sm text-slate-400 mb-1 block">
-              Término
-            </label>
+            <label className="text-sm text-slate-400 mb-1 block">Término</label>
             <input
               type="datetime-local"
+              name="endTime"
               className="w-full bg-slate-800 rounded-lg p-3 text-white"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
             />
           </div>
         </div>
 
-        {error && (
-          <p className="text-red-400 text-sm">{error}</p>
+        {state.error && <p className="text-red-400 text-sm">{state.error}</p>}
+        {state.success && (
+          <p className="text-green-400 text-sm">Atividade salva com sucesso!</p>
         )}
 
         <button
-          onClick={handleSubmit}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors"
+          type="submit"
+          disabled={isPending}
+          className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium py-3 rounded-lg transition-colors"
         >
-          Adicionar atividade
+          {isPending ? 'Salvando...' : 'Adicionar atividade'}
         </button>
       </div>
-    </div>
+    </form>
   );
 }

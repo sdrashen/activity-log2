@@ -12,6 +12,11 @@ function formatDuration(start: Date, end: Date): string {
   return h > 0 ? `${h}h ${m}min` : `${m}min`
 }
 
+function toDatetimeLocalValue(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
 export default async function ActivitiesPage() {
   const result = await getActivities()
 
@@ -30,6 +35,8 @@ export default async function ActivitiesPage() {
     startTime: formatTime(activity.startTime),
     endTime: formatTime(activity.endTime),
     duration: formatDuration(activity.startTime, activity.endTime),
+    startTimeInput: toDatetimeLocalValue(activity.startTime),
+    endTimeInput: toDatetimeLocalValue(activity.endTime),
   }))
 
   return (

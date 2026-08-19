@@ -1,5 +1,3 @@
-'use client';
-
 import ActivityForm from '@/components/ActivityForm';
 import ActivityList from '@/components/ActivityList';
 import EmptyState from '@/components/EmptyState';
@@ -10,6 +8,8 @@ type Activity = {
   startTime: string;
   endTime: string;
   duration: string;
+  startTimeInput: string;
+  endTimeInput: string;
 };
 
 type ActivityManagerProps = {
@@ -20,16 +20,7 @@ export default function ActivityManager({ activities }: ActivityManagerProps) {
   return (
     <div>
       <ActivityForm />
-      {activities.length > 0 ? (
-        <ActivityList
-          activities={activities}
-          onRemove={() => {
-            // TODO: implementar exclusão persistida no banco em uma fase futura
-          }}
-        />
-      ) : (
-        <EmptyState />
-      )}
+      {activities.length > 0 ? <ActivityList activities={activities} /> : <EmptyState />}
     </div>
   );
 }

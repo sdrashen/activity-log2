@@ -1,28 +1,46 @@
 'use client';
 
 import { useActionState, useEffect, useRef } from 'react';
-import { createActivity, type CreateActivityState } from '@/lib/actions';
+import { createActivity, updateActivity, type ActivityFormState } from '@/lib/actions';
 
-const initialState: CreateActivityState = { success: false, error: null };
+const initialState: ActivityFormState = { success: false, error: null };
 
-export default function ActivityForm() {
-  const [state, formAction, isPending] = useActionState(createActivity, initialState);
+type ActivityFormProps = {
+  activity?: {
+    id: string;
+    description: string;
+    startTimeInput: string;
+    endTimeInput: string;
+  };
+  onCancel?: () => void;
+  onSuccess?: () => void;
+};
+
+export default function ActivityForm({ activity, onCancel, onSuccess }: ActivityFormProps) {
+  const action = activity ? updateActivity : createActivity;
+  const [state, formAction, isPending] = useActionState(action, initialState);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (state.success) {
       formRef.current?.reset();
+      onSuccess?.();
     }
   }, [state.success]);
 
   return (
     <form ref={formRef} action={formAction} className="bg-slate-900 rounded-xl p-6 mb-8">
-      <h2 className="text-lg font-semibold mb-4">Nova atividade</h2>
+      <h2 className="text-lg font-semibold mb-4">
+        {activity ? 'Editar atividade' : 'Nova atividade'}
+      </h2>
       <div className="flex flex-col gap-4">
+        {activity && <input type="hidden" name="id" value={activity.id} />}
+
         <div>
           <label className="text-sm text-slate-400 mb-1 block">Descrição</label>
           <textarea
             name="description"
+            defaultValue={activity?.description}
             className="w-full bg-slate-800 rounded-lg p-3 text-white placeholder:text-slate-500 resize-none"
             placeholder="O que você fez?"
             rows={3}
@@ -35,6 +53,7 @@ export default function ActivityForm() {
             <input
               type="datetime-local"
               name="startTime"
+              defaultValue={activity?.startTimeInput}
               className="w-full bg-slate-800 rounded-lg p-3 text-white"
             />
           </div>
@@ -43,6 +62,7 @@ export default function ActivityForm() {
             <input
               type="datetime-local"
               name="endTime"
+              defaultValue={activity?.endTimeInput}
               className="w-full bg-slate-800 rounded-lg p-3 text-white"
             />
           </div>
@@ -50,16 +70,29 @@ export default function ActivityForm() {
 
         {state.error && <p className="text-red-400 text-sm">{state.error}</p>}
         {state.success && (
-          <p className="text-green-400 text-sm">Atividade salva com sucesso!</p>
+          <p className="text-green-400 text-sm">
+            {activity ? 'Alterações salvas!' : 'Atividade salva com sucesso!'}
+          </p>
         )}
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium py-3 rounded-lg transition-colors"
-        >
-          {isPending ? 'Salvando...' : 'Adicionar atividade'}
-        </button>
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium py-3 rounded-lg transition-colors"
+          >
+            {isPending ? 'Salvando...' : activity ? 'Salvar alterações' : 'Adicionar atividade'}
+          </button>
+          {activity && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-4 py-3 rounded-lg text-slate-400 hover:text-white transition-colors"
+            >
+              Cancelar
+            </button>
+          )}
+        </div>
       </div>
     </form>
   );

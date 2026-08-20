@@ -1,5 +1,6 @@
-import { getActivities } from '@/lib/activities'
+import { getActivities, getActivitySummary } from '@/lib/activities'
 import ActivityManager from '@/components/ActivityManager'
+import ActivitySummary from '@/components/ActivitySummary'
 
 function formatTime(date: Date): string {
   return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
@@ -18,18 +19,21 @@ function toDatetimeLocalValue(date: Date): string {
 }
 
 export default async function ActivitiesPage() {
-  const result = await getActivities()
+  const [activitiesResult, summaryResult] = await Promise.all([
+    getActivities(),
+    getActivitySummary(),
+  ])
 
-  if (!result.success) {
+  if (!activitiesResult.success) {
     return (
       <main className="max-w-2xl mx-auto p-6">
         <h1 className="text-2xl font-semibold mb-4">Atividades</h1>
-        <p role="alert" className="text-red-400">{result.error}</p>
+        <p role="alert" className="text-red-400">{activitiesResult.error}</p>
       </main>
     )
   }
 
-  const activities = result.data.map((activity) => ({
+  const activities = activitiesResult.data.map((activity) => ({
     id: String(activity.id),
     description: activity.description,
     startTime: formatTime(activity.startTime),
@@ -41,7 +45,16 @@ export default async function ActivitiesPage() {
 
   return (
     <main className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-4">Atividades</h1>
+      <h1 className="text-2xl font-semibold mb-6">Atividades</h1>
+
+      {summaryResult.success && summaryResult.data.count > 0 && (
+        <ActivitySummary
+          count={summaryResult.data.count}
+          totalMinutes={summaryResult.data.totalMinutes}
+          avgMinutes={summaryResult.data.avgMinutes}
+        />
+      )}
+
       <ActivityManager activities={activities} />
     </main>
   )

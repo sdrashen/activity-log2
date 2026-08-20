@@ -22,11 +22,12 @@ export default function ActivityForm({ activity, onCancel, onSuccess }: Activity
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (state.success) {
-      formRef.current?.reset();
-      onSuccess?.();
-    }
-  }, [state.success]);
+  if (state.success) {
+    formRef.current?.reset();
+    onSuccess?.();
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [state.success]);
 
   return (
     <form ref={formRef} action={formAction} className="bg-slate-900 rounded-xl p-6 mb-8">

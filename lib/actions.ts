@@ -64,7 +64,7 @@ export async function updateActivity(
   return { success: true, error: null }
 }
 
-export async function deleteActivity(id: number, _formData: FormData): Promise<void> {
+export async function deleteActivity(id: number): Promise<void> {
   try {
     await prisma.activity.delete({ where: { id } })
   } catch (error) {

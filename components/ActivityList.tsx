@@ -27,7 +27,7 @@ export default function ActivityList({ activities }: ActivityListProps) {
   function handleDelete(id: string) {
     setDeletingId(id);
     startTransition(async () => {
-      await deleteActivity(Number(id), new FormData());
+      await deleteActivity(Number(id));
       setDeletingId(null);
     });
   }

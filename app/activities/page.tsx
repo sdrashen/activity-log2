@@ -1,22 +1,7 @@
+import { formatTime, formatDuration, toDatetimeLocalValue } from '@/lib/formatters'
 import { getActivities, getActivitySummary } from '@/lib/activities';
 import ActivityManager from '@/components/ActivityManager';
 import ActivitySummary from '@/components/ActivitySummary';
-
-function formatTime(date: Date): string {
-  return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-}
-
-function formatDuration(start: Date, end: Date): string {
-  const totalMin = Math.floor((end.getTime() - start.getTime()) / 60000);
-  const h = Math.floor(totalMin / 60);
-  const m = totalMin % 60;
-  return h > 0 ? `${h}h ${m}min` : `${m}min`;
-}
-
-function toDatetimeLocalValue(date: Date): string {
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-}
 
 export default async function ActivitiesPage() {
   const [activitiesResult, summaryResult] = await Promise.all([

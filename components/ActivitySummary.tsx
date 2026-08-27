@@ -1,16 +1,9 @@
+import { formatMinutes } from '@/lib/formatters'
 type SummaryProps = {
   count: number;
   totalMinutes: number;
   avgMinutes: number;
 };
-
-function formatMinutes(minutes: number): string {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  if (h === 0) return `${m}min`;
-  if (m === 0) return `${h}h`;
-  return `${h}h ${m}min`;
-}
 
 export default function ActivitySummary({ count, totalMinutes, avgMinutes }: SummaryProps) {
   return (

@@ -84,19 +84,19 @@ Acesse **http://localhost:3000/activities** no navegador.
 
 ## Comandos disponíveis
 
-| Comando | Descrição |
-|---|---|
-| `npm run dev` | Inicia o servidor de desenvolvimento |
-| `npm run build` | Gera o build de produção |
-| `npm run lint` | Verifica o código com ESLint |
+| Comando                  | Descrição                            |
+| ------------------------ | ------------------------------------ |
+| `npm run dev`            | Inicia o servidor de desenvolvimento |
+| `npm run build`          | Gera o build de produção             |
+| `npm run lint`           | Verifica o código com ESLint         |
 | `npx prisma migrate dev` | Aplica alterações do schema no banco |
-| `npx prisma generate` | Regenera o Prisma Client |
-| `npx prisma studio` | Abre interface visual do banco |
-| `npx prisma validate` | Valida o schema do Prisma |
-| `npx prisma format` | Formata o schema do Prisma |
-| `docker compose up -d` | Inicia o PostgreSQL |
-| `docker compose down` | Para o PostgreSQL |
-| `docker compose down -v` | Para e apaga os dados |
+| `npx prisma generate`    | Regenera o Prisma Client             |
+| `npx prisma studio`      | Abre interface visual do banco       |
+| `npx prisma validate`    | Valida o schema do Prisma            |
+| `npx prisma format`      | Formata o schema do Prisma           |
+| `docker compose up -d`   | Inicia o PostgreSQL                  |
+| `docker compose down`    | Para o PostgreSQL                    |
+| `docker compose down -v` | Para e apaga os dados                |
 
 ## Estrutura do projeto
 
@@ -127,7 +127,6 @@ migrations/ # Histórico de migrations
 prisma.config.ts # Configuração do Prisma
 docker-compose.yml # Configuração do PostgreSQL
 .env.example # Exemplo de variáveis de ambiente
-
 
 ## Decisões técnicas
 

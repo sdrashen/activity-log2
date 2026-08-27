@@ -69,7 +69,9 @@ export default function ActivityList({ activities }: ActivityListProps) {
               </div>
             </div>
             <div className="flex items-center gap-3 text-slate-400 text-sm">
-              <span>{activity.startTime} → {activity.endTime}</span>
+              <span>
+                {activity.startTime} → {activity.endTime}
+              </span>
               <DurationBadge duration={activity.duration} />
             </div>
           </div>

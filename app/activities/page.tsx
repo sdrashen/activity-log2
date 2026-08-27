@@ -1,4 +1,4 @@
-import { formatTime, formatDuration, toDatetimeLocalValue } from '@/lib/formatters'
+import { formatTime, formatDuration, toDatetimeLocalValue } from '@/lib/formatters';
 import { getActivities, getActivitySummary } from '@/lib/activities';
 import ActivityManager from '@/components/ActivityManager';
 import ActivitySummary from '@/components/ActivitySummary';

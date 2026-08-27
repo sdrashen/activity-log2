@@ -1,4 +1,4 @@
-import { formatMinutes } from '@/lib/formatters'
+import { formatMinutes } from '@/lib/formatters';
 type SummaryProps = {
   count: number;
   totalMinutes: number;

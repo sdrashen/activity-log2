@@ -1,4 +1,4 @@
-import { formatTime, formatDuration, toDatetimeLocalValue, formatMinutes } from '../formatters';
+import { formatTime, formatDuration, toDatetimeLocalValue, formatMinutes } from '@/lib/formatters'
 
 describe('formatTime', () => {
   it('formata corretamente o horário', () => {

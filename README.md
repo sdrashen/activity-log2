@@ -147,10 +147,12 @@ Erros de banco indisponível (`P1001`, `P1002`) retornam mensagens diferentes de
 
 ## Limitações conhecidas
 
-- Os dados ficam vinculados ao banco local — não há autenticação de usuários
-- Sem suporte a múltiplos usuários
-- O banco precisa estar rodando localmente via Docker antes de iniciar a aplicação
-- Não há paginação na lista de atividades
-- - Vulnerabilidade conhecida na dependência transitória `deepmerge-ts` (via Prisma 7.9.1). 
-  A correção disponível exige downgrade para Prisma 6, o que é uma breaking change. 
-  Monitorar atualizações do Prisma para correção futura.
+- Os dados ficam vinculados ao banco local — não há autenticação de usuários.
+- Sem suporte a múltiplos usuários.
+- O banco precisa estar rodando localmente via Docker antes de iniciar a aplicação.
+- Não há paginação na lista de atividades.
+- Vulnerabilidade conhecida na dependência transitória `deepmerge-ts` (via Prisma 7.9.1). A correção disponível exige downgrade para Prisma 6, 
+  o que é uma breaking change. Monitorar atualizações do Prisma para correção futura.
+- O componente `ActivityForm` importa Server Actions (`lib/actions.ts`) que dependem do Prisma, o que impede testes unitários completos com Jest. 
+  Testes de comportamento interativo (validação, submissão) são cobertos na Fase 15 com Playwright.
+

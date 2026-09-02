@@ -155,4 +155,6 @@ Erros de banco indisponível (`P1001`, `P1002`) retornam mensagens diferentes de
   o que é uma breaking change. Monitorar atualizações do Prisma para correção futura.
 - O componente `ActivityForm` importa Server Actions (`lib/actions.ts`) que dependem do Prisma, o que impede testes unitários completos com Jest. 
   Testes de comportamento interativo (validação, submissão) são cobertos na Fase 15 com Playwright.
+- `ActivityList` e `ActivityManager` não são testados com Jest por dependerem 
+  indiretamente de Server Actions. Esses componentes são cobertos na Fase 15 com Playwright.
 

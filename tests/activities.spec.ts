@@ -28,7 +28,6 @@ test('Excluir atividade', async ({ page }) => {
   await page.getByRole('button', { name: 'Adicionar atividade' }).click();
   await expect(page.getByText(nome)).toBeVisible();
   
-  // Encontra o card da atividade e clica em Remover dentro dele
   await page.getByText(nome).locator('..').locator('..').getByRole('button', { name: 'Remover' }).click();
   
   await page.waitForTimeout(2000);
@@ -62,4 +61,26 @@ test('Validação de campos obrigatórios', async ({ page }) => {
   await page.locator('input[name="endTime"]').fill('2026-09-02T10:00');
   await page.getByRole('button', { name: 'Adicionar atividade' }).click();
   await expect(page.getByText('A descrição é obrigatória.')).toBeVisible();
+});
+
+test('Verifica atualização do consolidado', async ({ page }) => {
+  await page.goto('/activities');
+  
+  await page.getByPlaceholder('O que você fez?').fill(`Primeira ${Date.now()}`);
+  await page.locator('input[name="startTime"]').fill('2026-09-02T09:00');
+  await page.locator('input[name="endTime"]').fill('2026-09-02T10:00');
+  await page.getByRole('button', { name: 'Adicionar atividade' }).click();
+  await page.waitForTimeout(1000);
+
+  const consolidado = page.getByText('Atividades').locator('..');
+  const contagemAntes = await consolidado.getByRole('paragraph').first().textContent();
+
+  await page.getByPlaceholder('O que você fez?').fill(`Segunda ${Date.now()}`);
+  await page.locator('input[name="startTime"]').fill('2026-09-02T11:00');
+  await page.locator('input[name="endTime"]').fill('2026-09-02T12:00');
+  await page.getByRole('button', { name: 'Adicionar atividade' }).click();
+  await page.waitForTimeout(2000);
+
+  const contagemDepois = await consolidado.getByRole('paragraph').first().textContent();
+  expect(Number(contagemDepois)).toBeGreaterThan(Number(contagemAntes));
 });

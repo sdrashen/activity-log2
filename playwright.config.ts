@@ -11,6 +11,9 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
+process.env.DATABASE_URL = process.env.DATABASE_URL_TEST
+
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
@@ -24,12 +27,17 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  globalSetup: './tests/global-setup.ts',
+  
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    extraHTTPHeaders: {
+    'x-test-mode': 'true',
+    },
   },
 
   /* Configure projects for major browsers */

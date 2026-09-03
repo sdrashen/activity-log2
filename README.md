@@ -158,3 +158,21 @@ Erros de banco indisponível (`P1001`, `P1002`) retornam mensagens diferentes de
 - `ActivityList` e `ActivityManager` não são testados com Jest por dependerem 
   indiretamente de Server Actions. Esses componentes são cobertos na Fase 15 com Playwright.
 
+## Executando os testes E2E
+
+Antes de rodar os testes Playwright, inicie a aplicação apontando para o banco de teste:
+
+**Windows (PowerShell):**
+```powershell
+$env:DATABASE_URL="postgresql://admin:senha123@localhost:5433/activitylog_test"; npm run dev
+```
+
+**Linux/Mac:**
+```bash
+DATABASE_URL="postgresql://admin:senha123@localhost:5433/activitylog_test" npm run dev
+```
+
+Em outro terminal, rode os testes:
+```bash
+npx playwright test
+```

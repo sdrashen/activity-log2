@@ -34,3 +34,8 @@ test('Excluir atividade', async ({ page }) => {
   await page.waitForTimeout(2000);
   await expect(page.getByText(nome)).not.toBeVisible();
 });
+
+test('Editar atividade', async ({ page }) => {
+  await page.goto('/activities');
+  await expect(page.getByRole('button', { name: 'Editar' })).toBeVisible();
+});

@@ -55,3 +55,11 @@ test('Editar atividade', async ({ page }) => {
   
   await expect(page.getByText(`Editado: ${nome}`)).toBeVisible();
 });
+
+test('Validação de campos obrigatórios', async ({ page }) => {
+  await page.goto('/activities');
+  await page.locator('input[name="startTime"]').fill('2026-09-02T09:00');
+  await page.locator('input[name="endTime"]').fill('2026-09-02T10:00');
+  await page.getByRole('button', { name: 'Adicionar atividade' }).click();
+  await expect(page.getByText('A descrição é obrigatória.')).toBeVisible();
+});

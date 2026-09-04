@@ -1,18 +1,20 @@
-import { config } from 'dotenv';
-import { PrismaClient } from '../app/generated/prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
+import { config } from 'dotenv'
+import { PrismaClient } from '../app/generated/prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
 
-config();
+config()
+
+const connectionString = process.env.DATABASE_URL_TEST ?? process.env.DATABASE_URL
 
 const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL_TEST,
-});
+  connectionString,
+})
 
-const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient({ adapter })
 
 async function globalSetup() {
-  await prisma.activity.deleteMany();
-  await prisma.$disconnect();
+  await prisma.activity.deleteMany()
+  await prisma.$disconnect()
 }
 
-export default globalSetup;
+export default globalSetup

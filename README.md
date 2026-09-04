@@ -151,11 +151,11 @@ Erros de banco indisponível (`P1001`, `P1002`) retornam mensagens diferentes de
 - Sem suporte a múltiplos usuários.
 - O banco precisa estar rodando localmente via Docker antes de iniciar a aplicação.
 - Não há paginação na lista de atividades.
-- Vulnerabilidade conhecida na dependência transitória `deepmerge-ts` (via Prisma 7.9.1). A correção disponível exige downgrade para Prisma 6, 
+- Vulnerabilidade conhecida na dependência transitória `deepmerge-ts` (via Prisma 7.9.1). A correção disponível exige downgrade para Prisma 6,
   o que é uma breaking change. Monitorar atualizações do Prisma para correção futura.
-- O componente `ActivityForm` importa Server Actions (`lib/actions.ts`) que dependem do Prisma, o que impede testes unitários completos com Jest. 
+- O componente `ActivityForm` importa Server Actions (`lib/actions.ts`) que dependem do Prisma, o que impede testes unitários completos com Jest.
   Testes de comportamento interativo (validação, submissão) são cobertos na Fase 15 com Playwright.
-- `ActivityList` e `ActivityManager` não são testados com Jest por dependerem 
+- `ActivityList` e `ActivityManager` não são testados com Jest por dependerem
   indiretamente de Server Actions. Esses componentes são cobertos na Fase 15 com Playwright.
 
 ## Executando os testes E2E
@@ -163,30 +163,34 @@ Erros de banco indisponível (`P1001`, `P1002`) retornam mensagens diferentes de
 Antes de rodar os testes Playwright, inicie a aplicação apontando para o banco de teste:
 
 **Windows (PowerShell):**
+
 ```powershell
 $env:DATABASE_URL="postgresql://admin:senha123@localhost:5433/activitylog_test"; npm run dev
 ```
 
 **Linux/Mac:**
+
 ```bash
 DATABASE_URL="postgresql://admin:senha123@localhost:5433/activitylog_test" npm run dev
 ```
 
 Em outro terminal, rode os testes:
+
 ```bash
 npx playwright test
 ```
+
 ## Arquitetura e regras de camadas
 
 ### Separação de responsabilidades
 
-| Camada | Arquivos | Regra |
-|---|---|---|
-| Interface | `components/` | Nunca importa Prisma ou acessa banco diretamente |
-| Server Actions | `lib/actions.ts` | Única porta de entrada para escrita no banco |
-| Consultas | `lib/activities.ts` | Única porta de entrada para leitura do banco |
-| Validação | `lib/validation.ts` | Reutilizável — sem dependências de banco ou UI |
-| Banco | `lib/prisma.ts` | Exclusivo do servidor — marcado com `server-only` |
+| Camada         | Arquivos            | Regra                                             |
+| -------------- | ------------------- | ------------------------------------------------- |
+| Interface      | `components/`       | Nunca importa Prisma ou acessa banco diretamente  |
+| Server Actions | `lib/actions.ts`    | Única porta de entrada para escrita no banco      |
+| Consultas      | `lib/activities.ts` | Única porta de entrada para leitura do banco      |
+| Validação      | `lib/validation.ts` | Reutilizável — sem dependências de banco ou UI    |
+| Banco          | `lib/prisma.ts`     | Exclusivo do servidor — marcado com `server-only` |
 
 ### Regras que não devem ser violadas
 

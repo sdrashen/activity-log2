@@ -20,38 +20,48 @@ test('preenche campos para adicionar atividade', async ({ page }) => {
 });
 
 test('Excluir atividade', async ({ page }) => {
-  const nome = `Atividade única ${Date.now()}`
+  const nome = `Atividade única ${Date.now()}`;
   await page.goto('/activities');
   await page.getByPlaceholder('O que você fez?').fill(nome);
   await page.locator('input[name="startTime"]').fill('2026-09-02T09:00');
   await page.locator('input[name="endTime"]').fill('2026-09-02T10:00');
   await page.getByRole('button', { name: 'Adicionar atividade' }).click();
   await expect(page.getByText(nome)).toBeVisible();
-  
-  await page.getByText(nome).locator('..').locator('..').getByRole('button', { name: 'Remover' }).click();
-  
+
+  await page
+    .getByText(nome)
+    .locator('..')
+    .locator('..')
+    .getByRole('button', { name: 'Remover' })
+    .click();
+
   await page.waitForTimeout(2000);
   await expect(page.getByText(nome)).not.toBeVisible();
 });
 
 test('Editar atividade', async ({ page }) => {
-  const nome = `Atividade única ${Date.now()}`
+  const nome = `Atividade única ${Date.now()}`;
   await page.goto('/activities');
   await page.getByPlaceholder('O que você fez?').fill(nome);
   await page.locator('input[name="startTime"]').fill('2026-09-02T09:00');
   await page.locator('input[name="endTime"]').fill('2026-09-02T10:00');
   await page.getByRole('button', { name: 'Adicionar atividade' }).click();
   await expect(page.getByText(nome)).toBeVisible();
-  
-  await page.getByText(nome).locator('..').locator('..').getByRole('button', { name: 'Editar' }).click();
-  
+
+  await page
+    .getByText(nome)
+    .locator('..')
+    .locator('..')
+    .getByRole('button', { name: 'Editar' })
+    .click();
+
   // Usa o formulário de edição especificamente
-  const editForm = page.locator('form').filter({ hasText: 'Editar atividade' })
-  await editForm.getByPlaceholder('O que você fez?').fill(`Editado: ${nome}`)
-  await editForm.locator('input[name="startTime"]').fill('2026-09-02T11:00')
-  await editForm.locator('input[name="endTime"]').fill('2026-09-02T12:00')
-  await editForm.getByRole('button', { name: 'Salvar alterações' }).click()
-  
+  const editForm = page.locator('form').filter({ hasText: 'Editar atividade' });
+  await editForm.getByPlaceholder('O que você fez?').fill(`Editado: ${nome}`);
+  await editForm.locator('input[name="startTime"]').fill('2026-09-02T11:00');
+  await editForm.locator('input[name="endTime"]').fill('2026-09-02T12:00');
+  await editForm.getByRole('button', { name: 'Salvar alterações' }).click();
+
   await expect(page.getByText(`Editado: ${nome}`)).toBeVisible();
 });
 
@@ -65,7 +75,7 @@ test('Validação de campos obrigatórios', async ({ page }) => {
 
 test('Verifica atualização do consolidado', async ({ page }) => {
   await page.goto('/activities');
-  
+
   await page.getByPlaceholder('O que você fez?').fill(`Primeira ${Date.now()}`);
   await page.locator('input[name="startTime"]').fill('2026-09-02T09:00');
   await page.locator('input[name="endTime"]').fill('2026-09-02T10:00');

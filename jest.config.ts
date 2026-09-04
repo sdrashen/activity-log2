@@ -1,9 +1,9 @@
-import type { Config } from 'jest'
-import nextJest from 'next/jest.js'
+import type { Config } from 'jest';
+import nextJest from 'next/jest.js';
 
 const createJestConfig = nextJest({
   dir: './',
-})
+});
 
 const config: Config = {
   coverageProvider: 'v8',
@@ -12,6 +12,7 @@ const config: Config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
-}
+  testPathIgnorePatterns: ['<rootDir>/tests/'],
+};
 
-export default createJestConfig(config)
+export default createJestConfig(config);

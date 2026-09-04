@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { prisma } from '@/lib/prisma';
 import type { ActivityModel } from '@/app/generated/prisma/models';
 

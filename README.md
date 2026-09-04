@@ -176,3 +176,21 @@ Em outro terminal, rode os testes:
 ```bash
 npx playwright test
 ```
+## Arquitetura e regras de camadas
+
+### Separação de responsabilidades
+
+| Camada | Arquivos | Regra |
+|---|---|---|
+| Interface | `components/` | Nunca importa Prisma ou acessa banco diretamente |
+| Server Actions | `lib/actions.ts` | Única porta de entrada para escrita no banco |
+| Consultas | `lib/activities.ts` | Única porta de entrada para leitura do banco |
+| Validação | `lib/validation.ts` | Reutilizável — sem dependências de banco ou UI |
+| Banco | `lib/prisma.ts` | Exclusivo do servidor — marcado com `server-only` |
+
+### Regras que não devem ser violadas
+
+- Client Components **nunca** importam `lib/prisma.ts`, `lib/actions.ts` ou `lib/activities.ts` diretamente
+- Server Actions **sempre** validam dados recebidos antes de acessar o banco
+- Regras de negócio ficam em `lib/` — nunca dentro de componentes
+- `lib/prisma.ts`, `lib/activities.ts` e `lib/actions.ts` são marcados com `server-only`

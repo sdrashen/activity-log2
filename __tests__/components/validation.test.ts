@@ -1,4 +1,4 @@
-import { validateActivityInput } from '@/lib/validation'
+import { validateActivityInput } from '@/lib/validation';
 
 function makeFormData(data: Record<string, string>): FormData {
   const formData = new FormData();
